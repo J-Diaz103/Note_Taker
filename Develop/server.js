@@ -1,4 +1,5 @@
 // setting the dependecy of express
+const { info } = require('console');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -28,9 +29,31 @@ app.get('api/notes', (req, res) => {
   }
 });
 
+// this will post the notes to the db.json
+app.post('api/notes', (res,res) => {
+  const info = JSON.parse(fs.readFileSync('./db/db.json'));
+  const newNote = req.body;
+ //  this gives the id to the notes created using the date as a id
+newNote.id = Date.now();
+//  console.log(newNote);
+info.push(newNote);
+fs.writeFileSync('./db/db.json', JSON.stringify(info));
+res.json(info);
+});
+
+// this will delete the note fromt the db file
+app.delete('api/notes/:id', (req,res) => {
+  const info = JSON.parse(fs.readFileSync(path.join(__dirname, './db/db.json'), 'utf-8'));
+  const removeNote = req.params.id;
+  // this will remove the note by finding the id 
+  const updatedNotes = info.filter(newNote => newNote.id != removeNote);
+  fs.writeFileSync('./db/db.json', JSON.stringify(updatedNotes));
+  res.send(updatedNotes);
+});
 
 
-//check
+
+check
 require('./routes/apiRoutes')(app);
 require('./routes/htmlRoutes')(app);
 
