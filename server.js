@@ -13,6 +13,8 @@ const PORT = process.env.PORT ||3000;
 // used to parse the data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("public"));
+
 
 
 //this is pointing to the routes that will be needed
@@ -50,7 +52,6 @@ app.delete('/api/notes/:id', (req,res) => {
   res.send(updatedNotes);
 });
 
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
 });
@@ -58,6 +59,8 @@ app.get('/', (req, res) => {
 app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/notes.html'));
 });
+
+
 //check
 // require('./routes/apiRoutes')(app);
 // require('./routes/htmlRoutes')(app);
